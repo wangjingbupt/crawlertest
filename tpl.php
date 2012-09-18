@@ -11,7 +11,7 @@ $filePath = urldecode($_GET['filePath']);
 //$fp = fopen($filePath)
 if(file_exists($filePath))
 {
-  $html = head();
+  $html = head($filePath);
   if($_GET['edit'] == 1)
   {
     $file = file_get_contents($filePath);
@@ -26,19 +26,18 @@ function BodyOnLoad()
 } 
 </script>
       <form action="/tpl.php?update=1&filePath=$filePath" target="right" method="POST">
-        <textarea style="width:100%;word-wrap:normal;font-size:11px;overflow-x:scrolli;overflow-y:visible"  onkeydown='return catchTab(this,event)' name='tpl' id='tpl'>$innerHtml</textarea>
+        <textarea style="width:100%;height:80%;word-wrap:normal;font-size:11px;overflow-x:scrolli;overflow-y:visible"  onkeydown='return catchTab(this,event)' name='tpl' id='tpl'>$innerHtml</textarea>
         <button type="submit" class="btn btn-primary">Submit</button>
          <a href="/tpl.php?filePath=$filePath" target="right" ><button class="btn btn-primary" type="button">Back</button></a>
       </form>
 <script>
-BodyOnLoad();
+//BodyOnLoad();
 </script>
       </div>
 HTML;
   }
   else if($_GET['update']==1)
   {
-    echo $filePath;
     $fp = fopen($filePath,'w');
     $tpl = $_POST['tpl'];
     $sign = fwrite($fp,$tpl);
@@ -68,7 +67,7 @@ HTML;
 }
 else
 {
-  $html = head();
+  $html = head($filePath);
   if($_GET['new'] == 1)
   {
     $html .= newTpl();
@@ -112,7 +111,6 @@ HTML;
       exit;
     }
     $fp = fopen($filePath,'w');
-    echo $filePath;
     //$fp = fopen('/tmp/tpl.txt','w');
     $sign = fwrite($fp,$tpl);
     fclose($fp);
@@ -167,7 +165,9 @@ HTML;
 
 }
 
-function head(){
+function head($filePath){
+  $f = explode('css_selector',$filePath,2);
+  $filePath = $f[1];
   $html =<<<HTML
 <html>
 <head>
@@ -200,6 +200,7 @@ function head(){
     <script src="js/bootstrap-affix.js"></script>
     <script src="js/application.js"></script>
 <body>
+<div style='margin:10px;' class="alert">$filePath</div>
 HTML;
   return $html;
 }

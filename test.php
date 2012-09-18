@@ -1,6 +1,7 @@
 <?php
 error_reporting(0);
 ini_set('display_errors',0);
+include('call.php');
 
 $template = urldecode($_GET['template']);
 $site = urldecode($_GET['site']);
@@ -14,7 +15,7 @@ if($template != ""  && $site !="")
 {
   $siteSign = true;
   $siteHtml = file_get_contents($site);
-  if($siteHtml)
+/*  if($siteHtml)
   {
     $fp = fopen('/tmp/testSite.html','w');
     fwrite($fp,$siteHtml);
@@ -24,11 +25,13 @@ if($template != ""  && $site !="")
   {
     $siteSign = false;
   }
-
-  $path = "/home/ganji/";
-  $conf = $path."conf.txt";
-  $cmd = "{$path}test_extractor {$conf} {$template} {$depth} /tmp/testSite.html";
-  exec($cmd,$out);
+ */
+  //$path = "/home/ganji/";
+  //$conf = $path."conf.txt";
+  $call = new call();
+  $out = $call->call_extract($template,$depth,$siteHtml,$site);
+  // $cmd = "{$path}test_extractor {$conf} {$template} {$depth} /tmp/testSite.html";
+  // exec($cmd,$out);
   if(is_array($out))
   {
     $outs .= '<pre class="prettyprint linenums" style="margin-bottom: 9px;margin-top:20px;">';
